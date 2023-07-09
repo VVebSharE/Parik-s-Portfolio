@@ -4,15 +4,25 @@ import { useState, useEffect } from "react";
 
 function Projects({ resumeData, setSelectedPage }) {
   const [showFullText, setShowFullText] = useState(false);
-  // const [selectedOption, setSelectedOption] = useState("");
-  // const [filteredData, setFilteredData] = useState([]);
+  const [selectedOption, setSelectedOption] = useState("");
+  const [filteredData, setFilteredData] = useState('');
 
- 
+  let projects= resumeData.projects;
+  const projectCategories =Array.from(new Set(projects.map(prj=>prj.data.other.category)))
 
-  // function handleOptionSelect(event) {
-  //   const selectedOption = event.target.value;
-  //   setSelectedOption(selectedOption);
-  // }
+  if(selectedOption!='')
+  projects = projects.filter(v=>v.data.other.category===selectedOption);
+
+  if(filteredData)
+  projects = projects.filter(v=>v.name.includes(filteredData))
+
+
+  console.log(projects.length,selectedOption!='');
+
+  function handleOptionSelect(event) {
+    const selectedOption = event.target.value;
+    setSelectedOption(selectedOption,projects);
+  }
 
   function handleLearnMoreClick() {
     setShowFullText(true);
@@ -39,8 +49,7 @@ function Projects({ resumeData, setSelectedPage }) {
     },
   }
   const childVariant = {
-     hidden: {opacity: 0, scale: 0.9},
-     visible: {opacity: 1, scale: 1}
+    //  visible: {opacity: 1, scale: 1}
   }
   return (
     <section id="projects" className="mx-auto min-h-full w-5/6 py-5  mt-24">
@@ -81,13 +90,14 @@ function Projects({ resumeData, setSelectedPage }) {
               required=""
               placeholder="Search Projects"
               aria-label="Name"
+              onChange={(e)=>setFilteredData(e.target.value)}
             ></input>
           </div>
           {/* Selection box */}
 
           <div>
             <select
-              // onChange={handleOptionSelect}
+              onChange={handleOptionSelect}
               name="projects"
               id="projects"
               class="px-4 py-2 border-2 border-gray-200 focus:border-indigo-600 outline-none rounded-lg text-sm sm:text-md"
@@ -96,9 +106,9 @@ function Projects({ resumeData, setSelectedPage }) {
                 All Projects
               </option>
 
-              {resumeData.projects.map((prj, index) => (
-                <option class="sm:text-md" value={prj.data.other.category}>
-                  {prj.data.other.category}
+              {projectCategories.map((cat, index) => (
+                <option class="sm:text-md" value={cat}>
+                  {cat}
                 </option>
               ))}
             </select>
@@ -114,7 +124,7 @@ function Projects({ resumeData, setSelectedPage }) {
           viewport={{once: true, amount: 0.5}}
           variants={container}
           >
-            {resumeData.projects.map((prj, index) => (
+            {projects.map((prj, index) => (
               <motion.div className="mx-auto w-[400px] h-[400px] mt-5 rounded-md border-2 border-gray-100 px-5 py-6 text-center hover:bg-gray-100"
               variants={childVariant}>
                 <h1 className="mb-4 text-xl bg-indigo-500 p-3 text-white">
@@ -139,14 +149,14 @@ function Projects({ resumeData, setSelectedPage }) {
                 </div>
                 <div className="flex justify-between">
                   <div className="px-5 py-3 bg-indigo-500 text-white rounded-lg">
-                    <a href={prj.data.source_code}>
+                    <a href={prj.data.source_code} target="_blank">
                    <button>
                     Source Code
                    </button>
                     </a>
                   </div>
                   <div className="px-5 py-3 bg-indigo-500 text-white rounded-lg">
-                    <a href={prj.data.live_demo}>
+                    <a href={prj.data.live_demo} target="_blank">
                       <button>
                       Live Demo
                     </button>

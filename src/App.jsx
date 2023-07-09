@@ -17,14 +17,19 @@ const override = css`
 `;
 
 const LoadingAnimation = () => (
-  <div css={override}>
+  <div className="LoadingAnimation" style={{
+    display: "flex",
+    justifyContent: 'center',
+    alignItems:'center',
+    height: '100%'
+  }} >
     <ScaleLoader size={50} color={'#123abc'} loading={true} />
   </div>
 );
 
 
 
-const fetchResumeData =  () => {
+const fetchResumeData = () => {
   var myHeaders = new Headers();
   myHeaders.append("Content-Type", "application/x-www-form-urlencoded");
 
@@ -41,7 +46,7 @@ const fetchResumeData =  () => {
   return fetch(
     "https://mushy-ruby-firefly.cyclic.app/api/users/data",
     requestOptions
-  ).then((res) =>  res.json());
+  ).then((res) => res.json());
 };
 
 
@@ -91,25 +96,25 @@ function App() {
       {loading ? (
         <LoadingAnimation />
       ) :
-      resumeData ? (<div>
-        <Navbar
-          selectedPage={selectedPage}
-          setSelectedPage={setSelectedPage}
-          isTopOfPage={isTopOfPage}
-        />
-        <Home resumeData={resumeData} setSelectedPage={setSelectedPage}/>
-        <About resumeData={resumeData} setSelectedPage={setSelectedPage}/>
-        <Projects resumeData={resumeData} setSelectedPage={setSelectedPage}/>
-        <Services resumeData={resumeData} setSelectedPage={setSelectedPage}/>
-        <Contact resumeData={resumeData} setSelectedPage={setSelectedPage}/>
-        <Footer resumeData={resumeData} />
-      </div>):
-      (
-        // Handle the case when resumeData is still null after fetching
-        <div>No resume data available.</div>)
-    }
-      
-      
+        resumeData ? (<div>
+          <Navbar
+            selectedPage={selectedPage}
+            setSelectedPage={setSelectedPage}
+            isTopOfPage={isTopOfPage}
+          />
+          <Home resumeData={resumeData} setSelectedPage={setSelectedPage} />
+          <About resumeData={resumeData} setSelectedPage={setSelectedPage} />
+          <Projects resumeData={resumeData} setSelectedPage={setSelectedPage} />
+          <Services resumeData={resumeData} setSelectedPage={setSelectedPage} />
+          <Contact resumeData={resumeData} setSelectedPage={setSelectedPage} />
+          <Footer resumeData={resumeData} />
+        </div>) :
+          (
+            // Handle the case when resumeData is still null after fetching
+            <div>No resume data available.</div>)
+      }
+
+
 
     </>
   );
